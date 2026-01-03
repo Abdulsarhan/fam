@@ -46,31 +46,45 @@ typedef struct {
 extern "C" {
 #endif
 
-#define IM_API extern
+#define FAMAPI extern
 
-vec3 fam_vec3_cross(vec3 a, vec3 b);
+FAMAPI vec3 fam_vec3_cross(vec3 a, vec3 b);
 
-float fam_vec2_dot(vec2 a, vec2 b);
-float fam_vec3_dot(vec3 a, vec3 b);
-float fam_vec4_dot(vec4 a, vec4 b);
+FAMAPI float fam_vec2_dot(vec2 a, vec2 b);
+FAMAPI float fam_vec3_dot(vec3 a, vec3 b);
+FAMAPI float fam_vec4_dot(vec4 a, vec4 b);
 
-vec2 fam_vec2_add(vec2 a, vec2 b);
-vec3 fam_vec3_add(vec3 a, vec3 b);
-vec4 fam_vec4_add(vec4 a, vec4 b);
+FAMAPI vec2 fam_vec2_add(vec2 a, vec2 b);
+FAMAPI vec3 fam_vec3_add(vec3 a, vec3 b);
+FAMAPI vec4 fam_vec4_add(vec4 a, vec4 b);
 
-vec2 fam_vec2_sub(vec2 a, vec2 b);
-vec3 fam_vec3_sub(vec3 a, vec3 b);
-vec4 fam_vec4_sub(vec4 a, vec4 b);
+FAMAPI vec2 fam_vec2_sub(vec2 a, vec2 b);
+FAMAPI vec3 fam_vec3_sub(vec3 a, vec3 b);
+FAMAPI vec4 fam_vec4_sub(vec4 a, vec4 b);
 
-float fam_lerp(float a, float b, float t);
-
+FAMAPI float fam_lerp(float a, float b, float t);
+FAMAPI void fam_srand(uint64_t *state, uint64_t seed);
+FAMAPI uint32_t fam_rand(uint64_t *state)
 #ifdef __cplusplus
 }
 #endif
 #endif /* FAM_H */
 
 #ifdef FAM_IMPLEMENTATION
-vec3 fam_vec3_cross(vec3 a, vec3 b) {
+
+FAMAPI void fam_srand(uint64_t *state, uint64_t seed) {
+    if (seed == 0) {
+        seed = 1;
+    }
+    *state = seed;
+}
+
+FAMAPI uint32_t fam_rand(uint64_t *state) {
+    *state = *state * 0xff1cd035ul + 0x05;
+    return (uint32_t)(*state >> 32);
+}
+
+FAMAPI vec3 fam_vec3_cross(vec3 a, vec3 b) {
 	vec3 ret = {
 		(a.y * b.z) - (a.z * b.y),
 		(a.z * b.x) - (a.x * b.z),
@@ -79,63 +93,59 @@ vec3 fam_vec3_cross(vec3 a, vec3 b) {
 	return ret;	
 }
 
-float fam_vec2_dot(vec2 a, vec2 b) {
+FAMAPI float fam_vec2_dot(vec2 a, vec2 b) {
 	return a.x * b.x + a.y * b.y;
 }
 
-float fam_vec3_dot(vec3 a, vec3 b) {
+FAMAPI float fam_vec3_dot(vec3 a, vec3 b) {
 	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-float fam_vec4_dot(vec4 a, vec4 b) {
+FAMAPI float fam_vec4_dot(vec4 a, vec4 b) {
 	return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-vec2 fam_vec2_add(vec2 a, vec2 b) {
+FAMAPI vec2 fam_vec2_add(vec2 a, vec2 b) {
 	vec2 ret = { a.x + b.x, a.y + b.y };
 	return ret;
 }
 
-vec3 fam_vec3_add(vec3 a, vec3 b) {
+FAMAPI vec3 fam_vec3_add(vec3 a, vec3 b) {
 	vec3 ret = { a.x + b.x, a.y + b.y, a.z + b.z };
 	return ret;
 }
 
-vec4 fam_vec4_add(vec4 a, vec4 b) {
+FAMAPI vec4 fam_vec4_add(vec4 a, vec4 b) {
 	vec4 ret = { a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w };
 	return ret;
 }
 
-vec2 fam_vec2_sub(vec2 a, vec2 b) {
+FAMAPI vec2 fam_vec2_sub(vec2 a, vec2 b) {
 	vec2 ret = { a.x - b.x, a.y - b.y };
 	return ret;
 }
 
-vec3 fam_vec3_sub(vec3 a, vec3 b) {
+FAMAPI vec3 fam_vec3_sub(vec3 a, vec3 b) {
 	vec3 ret = { a.x - b.x, a.y - b.y, a.z - b.z };
 	return ret;
 
 }
 
-vec4 fam_vec4_sub(vec4 a, vec4 b) {
+FAMAPI vec4 fam_vec4_sub(vec4 a, vec4 b) {
 	vec4 ret = { a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w };
 	return ret;
 }
 
-mat4 fam_rotate(mat4 mat, vec3 vec, vec3 axis) {
+FAMAPI mat4 fam_rotate(mat4 mat, vec3 vec, vec3 axis) {
 
 }
 
-mat4 fam_scale(mat4 mat, vec3 vec) {
+FAMAPI mat4 fam_scale(mat4 mat, vec3 vec) {
 
 }
 
-mat4 fam_translate(mat4 mat, vec3 vec) {
+FAMAPI mat4 fam_translate(mat4 mat, vec3 vec) {
 
-0, 0, 0, tx
-0, 0, 0, ty
-0, 0, 0, tz
-0, 0, 0,  1
 }
 
 float fam_lerp(float a, float b, float t) {
